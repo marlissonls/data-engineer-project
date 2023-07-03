@@ -10,9 +10,8 @@ states_dict = {}
 for estado in df_states['estado'].unique():
     states_dict[estado] = df_states[df_states['estado'] == estado]
 
-# Para mostrar os dados de Pernambuco considerando o período do início da pandemia até os dias de hoje
+# Para selecionar um estado acesse o dicionário usando a sigla do estado
 pernamb = states_dict['PE']
-#print(pernamb.reset_index(drop=True))
 
-# Para mostrar dados de datas específicas
-print(pernamb[(pernamb['data'] >= '2020-03-14') & (pernamb['data'] <= '2020-03-28')])
+# Filtro das mortes nos Estados do dia 14 de março 2020 até 27 de fevereiro 2021
+pernamb['obitosNovos'][(pernamb['data'] >= '2020-03-14') & (pernamb['data'] <= '2021-02-27')]
