@@ -38,6 +38,9 @@ print(filtered_df_covid_case_world)
 # # Salvando o DataFrame modificado em um arquivo CSV
 #filtered_df_covid_case_world.to_csv('clean_data_covid_case_world.csv', index=False)
 
+
+# ## TODO 2 - 2020-03-29 e 2020-06-08
+
 # Filtrar os dados entre 2020-03-29 e 2020-06-08
 start_date_second_part = '2020-03-29'
 end_date_second_part = '2020-06-08'
@@ -51,4 +54,27 @@ print(filtered_second_df_covid_case_world)
 # # Salvando o DataFrame modificado em um arquivo CSV
 #filtered_second_df_covid_case_world.to_csv('clean_data_second_covid_case_world.csv', index=False)
 
+
+## TODO 3 - MORTES COVID NZ ATÉ 27/02/2021
+
+# Verificar se "NZ" está presente na coluna "coduf"
+# result = df_covid_case_world['coduf'].str.contains('NZ', na=False)
+#
+# # Exibir as linhas do DataFrame onde "NZ" está presente na coluna "coduf"
+# print(df_covid_case_world[result])
+
+# Filtrar mortes por COVID-19 na Nova Zelândia até 27/02/2021
+filtro_mortes_comeco_vacinacao_nz = pd.to_datetime('2021-02-27')
+df_mortes_comeco_vacinacao_nz_filtrado = df_covid_case_world.loc[(df_covid_case_world['data'] <= filtro_mortes_comeco_vacinacao_nz) & (df_covid_case_world['coduf'] == 'NZ')]
+
+# Criar um novo DataFrame com as colunas desejadas
+df_coluna_mortos = df_mortes_comeco_vacinacao_nz_filtrado[['data', 'coduf', 'obitosNovos']].copy()
+
+print(df_coluna_mortos)
+
+# # # Remoção de linhas duplicadas
+df_coluna_mortos = df_coluna_mortos.drop_duplicates()
+
+# # # Salvando o DataFrame modificado em um arquivo CSV
+#df_coluna_mortos.to_csv('clean_data_mortos_diarios_nz_comeco_vacinacao.csv', index=False)
 

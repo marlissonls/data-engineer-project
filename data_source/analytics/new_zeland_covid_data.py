@@ -23,7 +23,7 @@ df_covid_case_nz = df_covid_case_nz.rename(columns=colunas_pt)
 
 df_covid_case_nz['data'] = pd.to_datetime(df_covid_case_nz['data'], format='%Y-%m-%d')
 
-# Filtrar os dados entre 2020-03-14 e 2020-03-28
+# Filtrar os dados dos casos de COVID entre 2020-03-14 e 2020-03-28
 start_date_first_part = '2020-03-14'
 end_date_first_part = '2020-03-28'
 filtered_df_covid_case_nz = df_covid_case_nz.loc[(df_covid_case_nz['data'] >= start_date_first_part) & (df_covid_case_nz['data'] <= end_date_first_part)].copy()
@@ -35,7 +35,7 @@ filtered_df_covid_case_nz = filtered_df_covid_case_nz.drop_duplicates()
 # # # Salvando o DataFrame modificado em um arquivo CSV
 #filtered_df_covid_case_nz.to_csv('clean_data_covid_case_nz.csv', index=False)
 #
-# # Filtrar os dados entre 2020-03-29 e 2020-06-08
+# # Filtrar os dados dos casos de COVID entre 2020-03-29 e 2020-06-08
 start_date_second_part = '2020-03-29'
 end_date_second_part = '2020-06-08'
 filtered_second_df_covid_case_nz = df_covid_case_nz.loc[(df_covid_case_nz['data'] >= start_date_second_part) & (df_covid_case_nz['data'] <= end_date_second_part)].copy()
@@ -68,7 +68,7 @@ df_deaths_covid_nz = df_deaths_covid_nz.rename(columns=colunas_pt_mortes)
 
 df_deaths_covid_nz['semanaEpidemiologica'] = pd.to_datetime(df_deaths_covid_nz['semanaEpidemiologica'])
 
-# Filtrar os dados entre 2020-03-14 e 2020-03-28
+# Filtrar os dados dos mortos por COVID entre 2020-03-14 e 2020-03-28
 
 filtered_df_deaths_covid_nz = df_deaths_covid_nz.loc[(df_deaths_covid_nz['semanaEpidemiologica'] >= start_date_first_part) & (df_deaths_covid_nz['semanaEpidemiologica'] <= end_date_first_part)].copy()
 
@@ -82,7 +82,7 @@ filtered_df_deaths_covid_nz = filtered_df_deaths_covid_nz.drop_duplicates()
 print(filtered_df_deaths_covid_nz)
 
 
-# Filtrar os dados entre 2020-03-29 e 2020-06-08
+# Filtrar os dados dos mortos por COVID entre 2020-03-29 e 2020-06-08
 
 filtered_second_df_deaths_covid_nz = df_deaths_covid_nz.loc[(df_deaths_covid_nz['semanaEpidemiologica'] >= start_date_second_part) & (df_deaths_covid_nz['semanaEpidemiologica'] <= end_date_second_part)].copy()
 

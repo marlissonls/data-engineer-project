@@ -46,9 +46,7 @@ Taken from https://codepen.io/chriddyp/pen/bWLwgP.css
   .container {
       width: 80%;
  }
-  .column, .columns {
-      margin-left: 4%;
- }
+  .column,
   .column:first-child, .columns:first-child {
       margin-left: 0;
  }
@@ -327,7 +325,7 @@ table {
 th, td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #E1E1E1;
+  border-bottom: 1px solid #192444;
 }
 th:first-child, td:first-child {
   padding-left: 0;
@@ -368,7 +366,7 @@ hr {
   margin-top: 3rem;
   margin-bottom: 3.5rem;
   border-width: 0;
-  border-top: 1px solid #E1E1E1;
+  border-top: 1px solid #192444;
 }
 /* Clearing –––––––––––––––––––––––––––––––––––––––––––––––––– */
 /* Self Clearing Goodness */
@@ -405,23 +403,22 @@ hr {
 
 /* Main Layout ––––––––––––––––––––––––––––––––––––––––––––––––––*/
 body {
-  background-color: #1E1E1E;
-  color: #d8d8d8;
-  margin: 0;
-  padding: 0;
+  background-color: #192444;
+  color: white;
+  margin: 2%;
 }
 h1, h2, h3, h4, h5 {
   font-family: "Open Sans";
   /* font-weight: bold; */
   letter-spacing: 0.1px;
-  color: "#EAEAEA";
+  color: "white";
   /* padding-left: 12px; */
 }
 p {
   font-family: "Open Sans";
   font-weight: 400;
   font-size: 14px;
-  color: "#EAEAEA";
+  color: "white";
   padding-left: 12px;
 }
 a {
@@ -433,6 +430,64 @@ a {
 .text-padding{
   padding: 5px;
 }
+#title1 {
+  text-align: center;
+}
+
+#title2 {
+  text-align: center;
+}
+
+#title3 {
+  text-align: center;
+}
+.create_container2 {
+  border-radius: 15px;
+  background-color: #1f2c56;
+  margin: 10px;
+  position: center;
+  box-shadow: 2px 2px 2px 2px #1f2c56;
+}
+.create_container {
+  border-radius: 15px;
+  background-color: #1f2c56;
+  margin: 10px;
+  box-shadow: 2px 2px 2px 2px #1f2c56;
+  display: flex;
+  align-items: center;
+}
+.dcc_compon {
+  margin: 0 auto;
+  padding: 5px;
+  width: calc(100%-40px);
+}
+
+.fix_label {
+  font-size: 20px;
+  margin: 0 auto;
+  padding: 10px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  width: calc(100%-40px);
+}
+
+.container-display {
+  display: flex;
+}
+
+#header {
+  align-items: center;
+}
+
+.flex-display {
+  display: flex;
+}
+
+#mainContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Graph Layout ––––––––––––––––––––––––––––––––––––––––––––––––––*/
 .div-for-charts{
   display: flex;
@@ -468,7 +523,7 @@ a {
   margin-left: 8px;
 }
 .Select-control, .Select-menu-outer, .Select-multi-value-wrapper, .select-up, .is-open .Select-control {
-  background-color: #1E1E1E;
+  background-color: #192444;
   color: white;
 }
 
@@ -491,17 +546,17 @@ a {
   position: relative;
 }
 .has-value.Select--single>.Select-control .Select-value .Select-value-label, .has-value.is-pseudo-focused.Select--single>.Select-control .Select-value .Select-value-label{
-  color: #d8d8d8;
+  color: white;
   font-weight: 400;
   font-size: 14px;
 }
 
 
 #date {
-  background-color: #1e1e1e;
+  background-color: #192444;
   font-family: "Open Sans";
   font-weight: 400;
-  color: #dbdbdb;
+  color: white;
   border: 0.5px solid #dbdbdb44;
 }
 
@@ -520,14 +575,14 @@ a {
 }
 
 .DateInput.DateInput_1 {
-  background-color: #1e1e1e;
+  background-color: #192444;
 }
 
 .SingleDatePickerInput__withBorder {
   border-radius: 3px;
-  color: #dbdbdb;
-  background: #1e1e1e;
-  background-color: #1e1e1e;
+  color: white;
+  background: #192444;
+  background-color: #192444;
 }
 .SingleDatePickerInput.SingleDatePickerInput_1.SingleDatePickerInput__withBorder.SingleDatePickerInput__withBorder_2 {
   border: 0.0px solid #dbdbdb;
@@ -590,7 +645,7 @@ a {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #1e1e1e !important; 
+  background: #192444 !important;
   border-radius: 10px !important;
   display: block !important;
 }
