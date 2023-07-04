@@ -55,7 +55,7 @@ filtered_vaccination_world_copy = filtered_vaccination_world_copy.drop_duplicate
 # # Salvando o DataFrame modificado em um arquivo CSV
 #filtered_vaccination_world_copy.to_csv('clean_data_vaccination_world.csv', index=False)
 
-print(filtered_vaccination_world_copy)
+# print(filtered_vaccination_world_copy)
 
 # # TODO: 2. COVID cases - 2021-01-19 e 2021-02-27
 
@@ -72,7 +72,7 @@ filtered_second_vaccination_world_copy = filtered_second_vaccination_world_copy.
 # # Salvando o DataFrame modificado em um arquivo CSV
 #filtered_second_vaccination_world_copy.to_csv('clean_data_second_vaccination_world.csv', index=False)
 
-print(filtered_second_vaccination_world_copy)
+# print(filtered_second_vaccination_world_copy)
 
 ## TODO 3 - COVID MORTES ANTES DA VACINA - 14/03/2020 ATÉ 07/12/2020
 #'coduf', 'data','obitosAcumulado', 'obitosNovos', 'totalVacinacoes', 'pessoasVacinadas', 'novasVacinacoes'
@@ -137,9 +137,11 @@ end_date_morte_antes_vacinacao = '2022-07-17'
 
 df_mortes_depois_ds_vacinacao_filtrado_br_limite = df_covid_vaccination_correlacao.loc[(df_covid_vaccination_correlacao['data'] >= start_date_morte_antes_vacinacao) & (df_covid_vaccination_correlacao['data'] <= end_date_morte_antes_vacinacao)].copy()
 
-
-
 print(df_mortes_depois_ds_vacinacao_filtrado_br_limite)
+# # # # Salvando o DataFrame modificado em um arquivo CSV
+df_mortes_depois_ds_vacinacao_filtrado_br_limite.to_csv('clean_data_mortos_apos_vacinacao_brasil_correlacao.csv', index=False)
+
+# print(df_mortes_depois_ds_vacinacao_filtrado_br_limite)
 
 #dropando o coduf para poder fazer a correlação, não é possível fazer com string
 df_mortes_depois_ds_vacinacao_filtrado_br_limite.drop('coduf', axis=1, inplace=True)
@@ -147,8 +149,7 @@ df_mortes_depois_ds_vacinacao_filtrado_br_limite.drop('coduf', axis=1, inplace=T
 df_correlation_matrix = df_mortes_depois_ds_vacinacao_filtrado_br_limite
 
 
-print(df_correlation_matrix.corr())
+# print(df_correlation_matrix.corr())
 
-# # # # Salvando o DataFrame modificado em um arquivo CSV
-df_coluna_mortos_vacinacao.to_csv('clean_data_mortos_apos_vacinacao_brasil_correlacao.csv', index=False)
+
 
