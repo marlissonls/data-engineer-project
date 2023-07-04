@@ -23,6 +23,8 @@ df_covid_case_nz = df_covid_case_nz.rename(columns=colunas_pt)
 
 df_covid_case_nz['data'] = pd.to_datetime(df_covid_case_nz['data'], format='%Y-%m-%d')
 
+df_covid_case_nz.to_csv('clean_data_second_covid_case_nz.csv', index=False)
+
 # Filtrar os dados dos casos de COVID entre 2020-03-14 e 2020-03-28
 start_date_first_part = '2020-03-14'
 end_date_first_part = '2020-03-28'
