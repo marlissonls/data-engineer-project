@@ -178,6 +178,9 @@ dados_preenchidos = df_correlacao_vacinas_mortes_copy['totalVacinacoes'].tolist(
 # Adicionar coluna 'country' para identificar o país de origem dos dados
 df_correlacao_vacinas_mortes_copy['country'] = 'Brasil'
 
+# # # # Salvando o DataFrame modificado em um arquivo CSV
+df_correlacao_vacinas_mortes_copy.to_csv('clean_data_mortos_apos_vacinacao_brasil_correlacao.csv', index=False)
+
 print(df_correlacao_vacinas_mortes_copy)
 
 # fig_corr = go.Figure(

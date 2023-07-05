@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 # # TODO: 1. COVID cases 2020-12-08 e 2021-01-17
 # # Leitura do arquivo CSV que contém os dados de vacinação e criação do data frame inicial
 
@@ -32,122 +33,66 @@ colunas_float = ['casosAcumulado','obitosAcumulado', 'obitosNovos', 'casosAcumul
 
 df_covid_vaccination_world[colunas_float] = df_covid_vaccination_world[colunas_float].fillna(0).astype(int)
 
-colunas = ['coduf', 'continente', 'regiao', 'data', 'casosAcumulado','obitosAcumulado', 'obitosNovos', 'casosAcumuladoMilhao', 'obitosNovosMilhao', 'totalVacinacoes', 'pessoasVacinadas', 'novasVacinacoes']
-
-# columns_type = df_covid_vaccination_world[colunas].dtypes
-# print(columns_type)
+colunas = ['coduf', 'continente', 'regiao', 'data', 'casosAcumulado','obitosAcumulado', 'obitosNovos', 'totalVacinacoes', 'pessoasVacinadas', 'novasVacinacoes']
 
 # Criando um novo DataFrame com as colunas selecionadas
 df_covid_vaccination_world_copy = df_covid_vaccination_world.loc[:, colunas]
 
+columns_type = df_covid_vaccination_world_copy[colunas].dtypes
+# print(columns_type)
 
-# Filtrar os dados entre 2020-12-08 e 2021-01-17
-start_date_first_part = '2020-12-08'
-end_date_first_part = '2021-01-17'
-filtered_vaccination_world_copy = df_covid_vaccination_world_copy.loc[(df_covid_vaccination_world_copy['data'] >= start_date_first_part) & (df_covid_vaccination_world_copy['data'] <= end_date_first_part)].copy()
-
-# # Remoção de linhas duplicadas
-filtered_vaccination_world_copy = filtered_vaccination_world_copy.drop_duplicates()
-
-# dados_brazil = filtered_df_covid_vaccination_world_copy[filtered_df_covid_vaccination_world_copy['location'].str.contains('Brazil')][colunas]
-# print(dados_brazil['total_vaccinations'])
-
-# # Salvando o DataFrame modificado em um arquivo CSV
-#filtered_vaccination_world_copy.to_csv('clean_data_vaccination_world.csv', index=False)
-
-# print(filtered_vaccination_world_copy)
-
-# # TODO: 2. COVID cases - 2021-01-19 e 2021-02-27
-
-#Um exemplo foi o início da campanha de vacinação contra a covid-19, ocorrida em 2021-02-27
-
-# Filtrar os dados dos mortos por COVID entre 2021-01-19 e 2021-02-27
-start_date_second_part = '2021-01-19'
-end_date_second_part = '2021-02-27'
-filtered_second_vaccination_world_copy = df_covid_vaccination_world_copy.loc[(df_covid_vaccination_world_copy['data'] >= start_date_second_part) & (df_covid_vaccination_world_copy['data'] <= end_date_second_part)].copy()
+# Criar uma cópia do DataFrame original
+df_vacinas_mundo = df_covid_vaccination_world_copy.copy()
 
 # # Remoção de linhas duplicadas
-filtered_second_vaccination_world_copy = filtered_second_vaccination_world_copy.drop_duplicates()
+df_vacinas_mundo = df_vacinas_mundo.drop_duplicates()
 
-# # Salvando o DataFrame modificado em um arquivo CSV
-#filtered_second_vaccination_world_copy.to_csv('clean_data_second_vaccination_world.csv', index=False)
+# # # # Salvando o DataFrame modificado em um arquivo CSV
+df_vacinas_mundo.to_csv('clean_data_vacina_mundo.csv', index=False)
 
-# print(filtered_second_vaccination_world_copy)
+#======================PARTE DO BRASIL===================================#
 
-## TODO 3 - COVID MORTES ANTES DA VACINA - 14/03/2020 ATÉ 07/12/2020
-#'coduf', 'data','obitosAcumulado', 'obitosNovos', 'totalVacinacoes', 'pessoasVacinadas', 'novasVacinacoes'
+# Substituir os valores zerados pelos valores vizinhos
+df_vacinas_mundo['totalVacinacoes'] = df_vacinas_mundo['totalVacinacoes'].replace(0, np.nan)
+df_vacinas_mundo['totalVacinacoes'] = df_vacinas_mundo['totalVacinacoes'].fillna(method='ffill')
+df_vacinas_mundo['totalVacinacoes'] = df_vacinas_mundo['totalVacinacoes'].fillna(method='bfill')
 
-# # Filtrar os dados dos mortos por COVID entre 2020-03-14 e 2020-12-07
+df_vacinas_mundo['novasVacinacoes'] = df_vacinas_mundo['novasVacinacoes'].replace(0, np.nan)
+df_vacinas_mundo['novasVacinacoes'] = df_vacinas_mundo['novasVacinacoes'].fillna(method='ffill')
+df_vacinas_mundo['novasVacinacoes'] = df_vacinas_mundo['novasVacinacoes'].fillna(method='bfill')
 
-start_date_morte_antes_vacinacao = '2020-03-14'
-end_date_morte_antes_vacinacao = '2020-12-07'
+df_vacinas_mundo['obitosNovos'] = df_vacinas_mundo['obitosNovos'].replace(0, np.nan)
+df_vacinas_mundo['obitosNovos'] = df_vacinas_mundo['obitosNovos'].fillna(method='ffill')
+df_vacinas_mundo['obitosNovos'] = df_vacinas_mundo['obitosNovos'].fillna(method='bfill')
 
-filtered_df_covid_case_world_antes_vacinacao = df_covid_vaccination_world_copy.loc[(df_covid_vaccination_world_copy['data'] >= start_date_morte_antes_vacinacao) & (df_covid_vaccination_world_copy['data'] <= end_date_morte_antes_vacinacao)].copy()
+df_vacinas_mundo['obitosAcumulado'] = df_vacinas_mundo['obitosAcumulado'].replace(0, np.nan)
+df_vacinas_mundo['obitosAcumulado'] = df_vacinas_mundo['obitosAcumulado'].fillna(method='ffill')
+df_vacinas_mundo['obitosAcumulado'] = df_vacinas_mundo['obitosAcumulado'].fillna(method='bfill')
 
-# # # Remoção de linhas duplicadas
-filtered_df_covid_case_world_antes_vacinacao = filtered_df_covid_case_world_antes_vacinacao.drop_duplicates()
+filtered_df_correlacao_vacinas_mortes_brasil = df_vacinas_mundo[df_vacinas_mundo['coduf'] == 'BRA'].copy()
 
-# Criar um novo DataFrame com as colunas desejadas
-df_coluna_mortos_antes_vacinacao = filtered_df_covid_case_world_antes_vacinacao[['coduf', 'data', 'obitosNovos', 'totalVacinacoes', 'pessoasVacinadas', 'novasVacinacoes']].copy()
-
-
-#print(df_coluna_mortos_antes_vacinacao)
-
-#result = df_coluna_mortos_antes_vacinacao['coduf'].str.contains('BR', na=False)
-
-# Exibir as linhas do DataFrame onde "NZ" está presente na coluna "coduf"
-#print(df_coluna_mortos_antes_vacinacao[result])
-
-# # # Salvando o DataFrame modificado em um arquivo CSV
-#df_coluna_mortos_antes_vacinacao.to_csv('clean_data_mortos_diarios_antes_vacinacao-mundo.csv', index=False)
-
-# TODO 4 - COVID MORTES DEPOIS DA VACINA - 08/12/2020 - ATÉ HOJE
-# 'coduf', 'data','obitosAcumulado', 'obitosNovos', 'totalVacinacoes', 'pessoasVacinadas', 'novasVacinacoes'
-
-# Filtrar o DataFrame até a data específica
-filtro_mortes_depois_da_vacinacao_mundo= pd.to_datetime('2021-02-27')
-
-df_mortes_depois_ds_vacinacao_filtrado = df_covid_vaccination_world_copy.loc[(df_covid_vaccination_world_copy['data'] >= filtro_mortes_depois_da_vacinacao_mundo)]
-
-# Criar um novo DataFrame com as colunas desejadas
-df_coluna_mortos_vacinacao = df_mortes_depois_ds_vacinacao_filtrado[['coduf', 'data', 'obitosNovos', 'obitosAcumulado', 'totalVacinacoes', 'pessoasVacinadas', 'novasVacinacoes']].copy()
-
-# # # Remoção de linhas duplicadas
-df_coluna_mortos_vacinacao = df_coluna_mortos_vacinacao.drop_duplicates()
-
-#print(df_coluna_mortos_vacinacao)
-
-# # # Salvando o DataFrame modificado em um arquivo CSV
-df_coluna_mortos_vacinacao.to_csv('clean_data_mortos_diarios_apos_comeco_vacinacao_mundo.csv', index=False)
-
-#criando o DF que usaremos para fazer a correlação do total de óbitos acumulados por total de vacinações
-df_covid_vaccination_correlacao = pd.read_csv(
-    '../curated/world_data/clean_data_mortos_diarios_apos_comeco_vacinacao_mundo.csv')
-
-#Buscando só pelos dados do BRA
-df_covid_vaccination_correlacao = df_covid_vaccination_correlacao.loc[df_covid_vaccination_correlacao['coduf'] == 'BRA'].copy()
-
-#tranformando data pra datetime
-df_covid_vaccination_correlacao['data'] = pd.to_datetime(df_covid_vaccination_correlacao['data'])
+# Adicionar coluna 'country' para identificar o país de origem dos dados
+filtered_df_correlacao_vacinas_mortes_brasil.loc[:, 'country'] = 'Brasil'
 
 # Filtrar o DataFrame até a data específica, pois os dados depois de julho/22 estão com muitas colunas faltantes
 
 start_date_morte_antes_vacinacao = '2021-02-27'
 end_date_morte_antes_vacinacao = '2022-07-17'
 
-df_mortes_depois_ds_vacinacao_filtrado_br_limite = df_covid_vaccination_correlacao.loc[(df_covid_vaccination_correlacao['data'] >= start_date_morte_antes_vacinacao) & (df_covid_vaccination_correlacao['data'] <= end_date_morte_antes_vacinacao)].copy()
+df_mortes_depois_ds_vacinacao_filtrado_br_limite = filtered_df_correlacao_vacinas_mortes_brasil.loc[(filtered_df_correlacao_vacinas_mortes_brasil['data'] >= start_date_morte_antes_vacinacao) & (filtered_df_correlacao_vacinas_mortes_brasil['data'] <= end_date_morte_antes_vacinacao)].copy()
 
-print(df_mortes_depois_ds_vacinacao_filtrado_br_limite)
+
 # # # # Salvando o DataFrame modificado em um arquivo CSV
 df_mortes_depois_ds_vacinacao_filtrado_br_limite.to_csv('clean_data_mortos_apos_vacinacao_brasil_correlacao.csv', index=False)
 
-# print(df_mortes_depois_ds_vacinacao_filtrado_br_limite)
+# print(df_vacinas_mundo)
+print(df_mortes_depois_ds_vacinacao_filtrado_br_limite)
+
 
 #dropando o coduf para poder fazer a correlação, não é possível fazer com string
 df_mortes_depois_ds_vacinacao_filtrado_br_limite.drop('coduf', axis=1, inplace=True)
 
 df_correlation_matrix = df_mortes_depois_ds_vacinacao_filtrado_br_limite
-
 
 # print(df_correlation_matrix.corr())
 
