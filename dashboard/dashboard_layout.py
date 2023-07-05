@@ -2,6 +2,9 @@ import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dashboard.data import df_states, select_columns, fig, fig2
+from dashboard.data import df_correlacao_vacinas_mortes_copy
+from dash.dependencies import Input, Output, State
+import plotly.graph_objs as go
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG], meta_tags=[{"name": "viewport", "content": "width=device-width"}])
 
@@ -11,7 +14,7 @@ app.layout = dbc.Container(
             dbc.Row([
                     html.Div([
                         #html.Img(id="logo", src=app.get_asset_url("g3-2.png"), height=130),
-                        html.H3("COVID-19 - Análise do Impacto no Brasil",
+                        html.H1("COVID-19 - Análise do Impacto no Brasil",
                             id='title1',
                             style={'color': 'white'}
                         ),
@@ -131,20 +134,108 @@ app.layout = dbc.Container(
                                         style={"margin-top": "10px"}
                                     ),
                         dcc.Graph(id="line-graph", figure=fig2, style={
-                            "background-color": "#1f2c56", 'height': '400px', "margin-top": "10px"
+                            "background-color": "#1f2c56", 'height': '420px', "margin-top": "10px"
                             }),
-                        ], id="teste", style={'margin-right': '10px'}),
+                        ], id="teste", style={'margin-right': '15px'}),
+                    html.Div([
+                        dcc.Dropdown(
+                            id='brasil-dropdown',
+                            options=[
+                                {'label': 'Brasil', 'value': 'Brasil'},
+                            ],
+                            value=['Brasil'],
+                            style={"margin-top": "7px"},
+                            multi=True
+                        ),
+                        dcc.Graph(id='graph_corr', style={"background-color": "#1f2c56", 'height': '420px', "margin-top": "8px", 'width': '420px'})], style={'height': '420px', 'margin-right': '15px'}),
                     dbc.Col([
                         dcc.Loading(
                             id="loading-1",
                             type="default",
-                            children=[dcc.Graph(id="choropleth-map", figure=fig, style={'height': '400px','margin-right': '10px', 'width': '400px', "margin-top": "100px"})],
+                            children=[dcc.Graph(id="choropleth-map", figure=fig, style={'height': '420px', 'width': '420px', "margin-top": "102px"})],
                         )], )
                 ], style={
-                        "padding": "15px",
                         "background-color": "#192444", 'display': 'flex', 'flex-direction': 'row',
-                        'flex-wrap': 'wrap', 'align-items': 'center', 'justify-content': 'space-around',
-                        'margin-bottom': '25px', 'width': '80%'}),
+                        'align-items': 'center', 'justify-content': 'center',
+                        'margin-bottom': '25px', 'width': '90%', 'margin-left':'60px'}),
 
                 ]),
              ], fluid=True,)
+
+@app.callback(
+    Output('graph_corr', 'figure'),
+    [Input('country-dropdown', 'value')]
+)
+def vaccinarion_corr_death_graph(countries):
+    print('Selected countries:', countries)
+
+    df_corr = df_correlacao_vacinas_mortes_copy[df_correlacao_vacinas_mortes_copy['country'].isin(countries)]
+    print('Filtered DataFrame:')
+    print(df_corr)
+
+    traces = []
+
+    for country in countries:
+        df_country = df_corr[df_corr['country'] == country]
+        traces.append(
+            go.Scatter(
+                x=df_country['data'],
+                y=df_country['obitosNovos'],
+                name=f'Novos Óbitos - {country}'
+            )
+        )
+        traces.append(
+            go.Scatter(
+                x=df_country['data'],
+                y=df_country['totalVacinacoes'],
+                name=f'Vacinações Totais - {country}',
+                yaxis='y2'
+            )
+        )
+
+    layout = go.Layout(
+        title='Correlação - Óbitos Novos vs. Total de Vacinações',
+        hovermode='closest',
+        plot_bgcolor='#1f2c56',
+        paper_bgcolor='rgba(0,0,0,0)',
+        yaxis=dict(
+            title='Novos Óbitos',
+            linewidth=0.1,
+            titlefont=dict(color='white'),
+            tickfont=dict(color='white'),
+            linecolor='white'
+        ),
+        yaxis2=dict(
+            title='Total de Vacinações',
+            overlaying='y',
+            side='right',
+            linewidth=0.1,
+            titlefont=dict(color='orange'),
+            tickfont=dict(color='orange')
+        ),
+        xaxis=dict(
+            visible=True,
+            color='white',
+            showline=True,
+            showgrid=True,
+            showticklabels=True,
+            linecolor='white',
+            linewidth=0.1,
+            ticks='outside',
+            tickfont=dict(family='Arial', size=12, color='white')),
+        legend={
+            'orientation': 'h',
+            'bgcolor': '#1f2c56',
+            'x': 0.5,
+            'y': 2,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        font=dict(
+            family='sans-serif',
+            size=12,
+            color='white'
+        )
+    )
+
+    return {'data': traces, 'layout': layout}

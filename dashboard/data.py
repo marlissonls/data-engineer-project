@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import json
 from os.path import dirname
+import numpy as np
 
 SOURCE = dirname(dirname(__file__))
 
@@ -136,3 +137,82 @@ fig2.update_layout(
     autosize=True,
     margin=dict(l=10, r=10, b=10, t=10),
     )
+
+
+#=====================================CORRELAÇÃO ÓBITOS vs VACINAÇÃO===============================================#
+
+df_correlacao_vacinas_mortes = pd.read_csv(f'{SOURCE}/data_source/curated/brazil_data/clean_data_mortos_apos_vacinacao_brasil_correlacao.csv')
+
+filtered_df_correlacao_vacinas_mortes = df_correlacao_vacinas_mortes[df_correlacao_vacinas_mortes['coduf'] == 'BRA']
+
+# print(filtered_df_correlacao_vacinas_mortes)
+# Criando um novo DataFrame com as colunas desejadas do DataFrame filtrado
+
+df_correlacao_vacinas_mortes_copy = pd.DataFrame({
+    'coduf': filtered_df_correlacao_vacinas_mortes['coduf'],
+    'data': filtered_df_correlacao_vacinas_mortes['data'],
+    'obitosAcumulado': filtered_df_correlacao_vacinas_mortes['obitosAcumulado'],
+    'novasVacinacoes': filtered_df_correlacao_vacinas_mortes['novasVacinacoes'],
+    'obitosNovos': filtered_df_correlacao_vacinas_mortes['obitosNovos'],
+    'totalVacinacoes': filtered_df_correlacao_vacinas_mortes['totalVacinacoes']
+})
+
+# Converter a coluna 'data' para o tipo de dados datetime
+df_correlacao_vacinas_mortes_copy['data'] = pd.to_datetime(df_correlacao_vacinas_mortes_copy['data'])
+
+# Criar uma cópia do DataFrame original
+df_correlacao_vacinas_mortes_copy = filtered_df_correlacao_vacinas_mortes.copy()
+
+# Substituir os valores zerados pelos valores vizinhos
+df_correlacao_vacinas_mortes_copy['totalVacinacoes'] = df_correlacao_vacinas_mortes_copy['totalVacinacoes'].replace(0, np.nan)
+df_correlacao_vacinas_mortes_copy['totalVacinacoes'] = df_correlacao_vacinas_mortes_copy['totalVacinacoes'].fillna(method='ffill')
+df_correlacao_vacinas_mortes_copy['totalVacinacoes'] = df_correlacao_vacinas_mortes_copy['totalVacinacoes'].fillna(method='bfill')
+
+df_correlacao_vacinas_mortes_copy['novasVacinacoes'] = df_correlacao_vacinas_mortes_copy['novasVacinacoes'].replace(0, np.nan)
+df_correlacao_vacinas_mortes_copy['novasVacinacoes'] = df_correlacao_vacinas_mortes_copy['novasVacinacoes'].fillna(method='ffill')
+df_correlacao_vacinas_mortes_copy['novasVacinacoes'] = df_correlacao_vacinas_mortes_copy['novasVacinacoes'].fillna(method='bfill')
+
+# Verificar os valores preenchidos
+dados_preenchidos = df_correlacao_vacinas_mortes_copy['totalVacinacoes'].tolist()
+
+# Adicionar coluna 'country' para identificar o país de origem dos dados
+df_correlacao_vacinas_mortes_copy['country'] = 'Brasil'
+
+print(df_correlacao_vacinas_mortes_copy)
+
+# fig_corr = go.Figure(
+#     data=[
+#         go.Scatter(
+#             x=df_correlacao_vacinas_mortes_copy['data'],
+#             y=df_correlacao_vacinas_mortes_copy['obitosNovos'],
+#             name='Novos Óbitos',
+#             yaxis='y1'
+#         ),
+#         go.Scatter(
+#             x=df_correlacao_vacinas_mortes_copy['data'],
+#             y=df_correlacao_vacinas_mortes_copy['totalVacinacoes'],
+#             name='Vacinações Totais',
+#             yaxis='y2'
+#         )
+#     ],
+#     layout=go.Layout(
+#         title='Correlação - Óbitos Novos vs. Total de Vacinações',
+#         yaxis=dict(
+#             title='Novos Óbitos',
+#             titlefont=dict(color='white'),
+#             tickfont=dict(color='white')
+#         ),
+#         yaxis2=dict(
+#             title='Vacinações Totais',
+#             overlaying='y',
+#             side='right',
+#             titlefont=dict(color='orange'),
+#             tickfont=dict(color='orange')
+#         ),
+#         xaxis=dict(title='Valores X'),
+#         legend=dict(orientation='h'),
+#     )
+# )
+#
+#
+#
