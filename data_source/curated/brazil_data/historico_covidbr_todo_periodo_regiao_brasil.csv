@@ -1,4 +1,4 @@
-regiao;coduf;data;semanaEpidemiologica;populacaoTCU2019;casosAcumulado;casosNovos;obitosAcumulado;obitosNovos;Recuperadosnovos;emAcompanhamentoNovos
+regiao;coduf;data;semana_epidemiologica;populacaotcu2019;casos_acumulado;casos_novos;obitos_acumulado;obitos_novos;recuperados_novos;em_acompanhamento_novos
 Brasil;76;2020-02-25;9;210147125;0;0;0;0;0;0
 Brasil;76;2020-02-26;9;210147125;1;1;0;0;1;0
 Brasil;76;2020-02-27;9;210147125;1;0;0;0;1;0

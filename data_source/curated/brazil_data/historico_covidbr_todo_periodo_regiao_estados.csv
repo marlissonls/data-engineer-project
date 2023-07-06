@@ -1,4 +1,4 @@
-regiao;estado;coduf;data;semanaEpidemiologica;populacaoTCU2019;casosAcumulado;casosNovos;obitosAcumulado;obitosNovos
+regiao;estado;coduf;data;semana_epidemiologica;populacaotcu2019;casos_acumulado;casos_novos;obitos_acumulado;obitos_novos
 Norte;RO;11;2020-02-25;9;1777225;0;0;0;0
 Norte;RO;11;2020-02-26;9;1777225;0;0;0;0
 Norte;RO;11;2020-02-27;9;1777225;0;0;0;0

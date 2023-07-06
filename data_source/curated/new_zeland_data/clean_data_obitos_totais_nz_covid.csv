@@ -1,4 +1,4 @@
-regiao,coduf,data,casosNovos,casosAcumulado,obitosNovos,obitosAcumulado
+regiao,coduf,data,casos_novos,casos_acumulado,obitos_novos,obitos_acumulado
 New Zealand,NZ,2020-01-03,0,0,0,0
 New Zealand,NZ,2020-01-04,0,0,0,0
 New Zealand,NZ,2020-01-05,0,0,0,0
