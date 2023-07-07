@@ -3,6 +3,7 @@ from db_config import conn as db_conn
 from dwhouse import tabelas_dict
 from os.path import dirname
 import numpy as np
+from collections import deque
 
 DATASOUCE_PATH = dirname(dirname(__file__))
 
@@ -30,16 +31,20 @@ sao_carlos_list: np.recarray =       sao_carlos.to_records(index=False)
 
 def populate_datawarehouse(table_name: str, dataframe):
     cur = db_conn.cursor()
-    
+
     cur.execute(f'DROP TABLE IF EXISTS {table_name};')
     db_conn.commit()
-    
+
     cur.execute(f'{tabelas_dict[table_name]};')
     db_conn.commit()
 
-    for data in dataframe:
+    rows = deque(dataframe)
+
+    while rows:
+        data = rows.popleft()
+
         data = np.where(np.asarray(data).dtype == np.int64, data.astype(int), data)
-            
+
         values = '('
         for i in range(len(data)):
             values += '%s,'
