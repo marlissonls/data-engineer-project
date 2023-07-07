@@ -1,9 +1,9 @@
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 from dashboard.dashboard_layout import app
-from dashboard.data import df_correlacao_vacinas_mortes_copy
+from dashboard.data import df_vacinacao_obito
 
-
+##===============correlação vacina vs óbito=======================##
 
 @app.callback(
     Output('graph_corr', 'figure'),
@@ -12,7 +12,7 @@ from dashboard.data import df_correlacao_vacinas_mortes_copy
 def vaccinarion_corr_death_graph(countries):
     print('Selected countries:', countries)
 
-    df_corr = df_correlacao_vacinas_mortes_copy[df_correlacao_vacinas_mortes_copy['country'].isin(countries)]
+    df_corr = df_vacinacao_obito[df_vacinacao_obito['country'].isin(countries)]
     print('Filtered DataFrame:')
     print(df_corr)
 

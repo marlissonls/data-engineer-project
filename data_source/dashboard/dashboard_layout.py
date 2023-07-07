@@ -22,9 +22,11 @@ app.layout = dbc.Container(
                             id='country-dropdown',
                             options=[
                                 {'label': 'Brasil', 'value': 'Brasil'},
-                                {'label': 'Nova Zelândia', 'value': 'Nova Zelândia'}
+                                {'label': 'Nova Zelândia', 'value': 'Nova Zelândia'},
+                                {'label': 'Araraquara', 'value': 'Araraquara'},
+                                {'label': 'Dracena', 'value': 'Dracena'}
                             ],
-                            value=['Brasil', 'Nova Zelândia'],
+                            value=['Brasil', 'Nova Zelândia', 'Araraquara', 'Dracena'],
                             multi=True
 
                         ),
@@ -89,7 +91,7 @@ app.layout = dbc.Container(
                     html.Div([
                         html.Div([
                             dcc.Graph(
-                                id='first_part_lockdown_death_graph',
+                                id='graph_lockdown_cases',
                                 config={'displayModeBar': 'hover'},
                                 style={'height': '250px'}
                                 )],
@@ -98,7 +100,7 @@ app.layout = dbc.Container(
 
                         html.Div([
                             dcc.Graph(
-                                id='second_part_lockdown_death_graph',
+                                id='graph_lockdown_death',
                                 config={'displayModeBar': 'hover'},
                                 style={'height': '250px'})],
                                 className='create_container2 four columns',
@@ -106,7 +108,7 @@ app.layout = dbc.Container(
 
                         html.Div([
                             dcc.Graph(
-                                id='first_part_lockdown_cases_graph',
+                                id='graph_lockdown_cases_sc_ar',
                                 config={'displayModeBar': 'hover'},
                                 style={'height': '250px'})],
                                 className='create_container2 four columns',
@@ -114,7 +116,7 @@ app.layout = dbc.Container(
 
                         html.Div([
                             dcc.Graph(
-                                id='second_part_lockdown_cases_graph',
+                                id='graph_lockdown_death_sc_ar',
                                 config={'displayModeBar': 'hover'},
                                 style={'height': '250px'})],
                                 className='create_container2 four columns',
