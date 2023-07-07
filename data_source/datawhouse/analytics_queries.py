@@ -63,11 +63,9 @@ def get_data_for_analytics(query: str) -> list[tuple]:
         cursor.close()
 
 def save_data_to_csv_for_analytics(analyzed_situation: str, analysis_columns: list):
-    analysis_list_of_tuples: list[tuple] = get_data_for_analytics(query_dict[analyzed_situation])
+    analysis_list_of_tuples = get_data_for_analytics(query_dict[analyzed_situation])
 
-    analysis_list_of_lists: list[list] = list(map(list, analysis_list_of_tuples))
-
-    analysis_dataframe: pd.DataFrame = pd.DataFrame(analysis_list_of_lists, columns=analysis_columns)
+    analysis_dataframe = pd.DataFrame(analysis_list_of_tuples, columns=analysis_columns)
 
     analysis_dataframe[analysis_columns[0]] = pd.to_datetime(analysis_dataframe[analysis_columns[0]], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
 
