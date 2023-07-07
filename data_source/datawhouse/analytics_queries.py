@@ -1,9 +1,7 @@
 import pandas as pd
 from psycopg2 import Error
 from db_config import conn as db_conn
-import datetime
 from os.path import dirname
-import numpy as np
 
 DATASOURCE_PATH = dirname(dirname(__file__))
 
@@ -49,7 +47,7 @@ query_dict = {
                           ORDER BY b.estado ASC, b.data ASC"""
 }
 
-def get_data_for_analytics(query):
+def get_data_for_analytics(query: str) -> list[tuple]:
     try:
         cursor = db_conn.cursor()
         cursor.execute(query)
@@ -64,42 +62,30 @@ def get_data_for_analytics(query):
     finally:
         cursor.close()
 
+def save_data_to_csv_for_analytics(analyzed_situation: str, analysis_columns: list):
+    analysis_list_of_tuples: list[tuple] = get_data_for_analytics(query_dict[analyzed_situation])
+
+    analysis_list_of_lists: list[list] = list(map(list, analysis_list_of_tuples))
+
+    analysis_dataframe: pd.DataFrame = pd.DataFrame(analysis_list_of_lists, columns=analysis_columns)
+
+    analysis_dataframe[analysis_columns[0]] = pd.to_datetime(analysis_dataframe[analysis_columns[0]], format='%Y-%m-%d').dt.strftime('%Y-%m-%d')
+
+    analysis_dataframe.to_csv(f'{DATASOURCE_PATH}/analytics/{analyzed_situation}.csv', index=False)
+
 # MORTES BRASIL X NOVA ZELÂNDIA ENTRE 2020-02-25 E 2021-02-27
-deaths_br_nz = get_data_for_analytics(query_dict['deaths_br_nz'])
-deaths_br_nz_list = [list(tupla) for tupla in deaths_br_nz]
-for i in range(len(deaths_br_nz)):
-    deaths_br_nz_list[i][0] = deaths_br_nz_list[i][0].strftime('%Y-%m-%d')
-df_deaths_br_nz = pd.DataFrame(deaths_br_nz_list, columns=['data', 'br_obitos', 'nz_obitos'])
-df_deaths_br_nz.to_csv(f'{DATASOURCE_PATH}/analytics/deaths_br_nz.csv', index=False)
-
+save_data_to_csv_for_analytics('deaths_br_nz',     ['data', 'br_obitos', 'nz_obitos'])
 # CASOS BRASIL X NOVA ZELÂNDIA ENTRE 2020-02-25 E 2021-02-27
-cases_br_nz = get_data_for_analytics(query_dict['cases_br_nz'])
-cases_br_nz_list = [list(tupla) for tupla in cases_br_nz]
-for i in range(len(cases_br_nz)):
-    cases_br_nz_list[i][0] = cases_br_nz_list[i][0].strftime('%Y-%m-%d')
-df_cases_br_nz = pd.DataFrame(cases_br_nz_list, columns=['data', 'br_casos', 'nz_casos'])
-df_cases_br_nz.to_csv(f'{DATASOURCE_PATH}/analytics/cases_br_nz.csv', index=False)
-
+save_data_to_csv_for_analytics('cases_br_nz',      ['data', 'br_casos', 'nz_casos'])
 # PANORAMA BRASIL DE TODO O PERÍODO
-br_panorama = get_data_for_analytics(query_dict['br_panorama'])
-br_panorama_list = [list(tupla) for tupla in br_panorama]
-for i in range(len(br_panorama)):
-    br_panorama_list[i][0] = br_panorama_list[i][0].strftime('%Y-%m-%d')
-df_br_panorama = pd.DataFrame(br_panorama_list, columns=['data', 'br_obitos', 'br_obitos_acumulado', 'br_casos','br_casos_acumulado'])
-df_br_panorama.to_csv(f'{DATASOURCE_PATH}/analytics/br_panorama.csv', index=False)
-
+save_data_to_csv_for_analytics('br_panorama',      ['data', 'br_obitos', 'br_obitos_acumulado', 'br_casos','br_casos_acumulado'])
 # ANÁLISE DO DESEMPENHO DA VACINAÇÃO NO BRASIL APÓS 2021-02-27
-deaths_x_vacinas = get_data_for_analytics(query_dict['deaths_x_vacinas'])
-deaths_x_vacinas_list = [list(tupla) for tupla in deaths_x_vacinas]
-for i in range(len(deaths_x_vacinas_list)):
-    deaths_x_vacinas_list[i][0] = deaths_x_vacinas_list[i][0].strftime('%Y-%m-%d')
-df_deaths_x_vacinas = pd.DataFrame(deaths_x_vacinas_list, columns=['data', 'br_obitos', 'vacinas_acumulado'])
-df_deaths_x_vacinas.to_csv(f'{DATASOURCE_PATH}/analytics/deaths_x_vacinas.csv', index=False)
-
+save_data_to_csv_for_analytics('deaths_x_vacinas', ['data', 'br_obitos', 'vacinas_acumulado'])
 # ANÁLISE DO MAPA DE CALOR DURANTE TODO O PERÍODO
-states_heat_map = get_data_for_analytics(query_dict['states_heat_map'])
-states_heat_map_list = [list(tupla) for tupla in states_heat_map]
-for i in range(len(states_heat_map_list)):
-    states_heat_map_list[i][0] = states_heat_map_list[i][0].strftime('%Y-%m-%d')
-df_states_heat_map = pd.DataFrame(states_heat_map_list, columns=['data', 'regiao', 'estado', 'obitos_novos', 'obitos_acumulado', 'casos_novos', 'casos_acumulado'])
-df_states_heat_map.to_csv(f'{DATASOURCE_PATH}/analytics/states_heat_map.csv', index=False)
+save_data_to_csv_for_analytics('states_heat_map',  ['data', 'regiao', 'estado', 'obitos_novos', 'obitos_acumulado', 'casos_novos', 'casos_acumulado'])
+# MORTES ARARAQUARA X SÃO CARLOS ENTRE 17 jan 2021 E 10 abr 2021
+save_data_to_csv_for_analytics('deaths_cities',    ['data', 'araraquara_obitos', 'sao_carlos_obitos'])
+# CASOS ARARAQUARA X SÃO CARLOS ENTRE 17 jan 2021 E 10 abr 2021
+save_data_to_csv_for_analytics('cases_cities',     ['data', 'araraquara_casos', 'sao_carlos_casos'])
+
+db_conn.close()
