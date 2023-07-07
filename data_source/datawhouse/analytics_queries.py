@@ -8,12 +8,12 @@ import numpy as np
 DATASOURCE_PATH = dirname(dirname(__file__))
 
 query_dict = {
-    'deaths_br_nz': """SELECT brasil.data AS data, brasil.obitos_novos AS br_obitos, new_zealand.obitos_novos AS nz_obitos
+    'deaths_br_nz': """SELECT brasil.data AS data, brasil.regiao AS br_pais, brasil.obitos_novos AS br_obitos, new_zealand.regiao AS nz_pais, new_zealand.obitos_novos AS nz_obitos
                        FROM brasil INNER JOIN new_zealand ON brasil.data = new_zealand.data
                        WHERE brasil.data >= '2020-02-25' AND brasil.data <= '2021-02-27'
                        ORDER BY brasil.data ASC""",
     
-    'cases_br_nz': """SELECT brasil.data AS data, brasil.casos_novos AS br_casos, new_zealand.casos_novos AS nz_casos
+    'cases_br_nz': """SELECT brasil.data AS data, brasil.regiao AS br_pais, brasil.casos_novos AS br_casos, new_zealand.regiao AS nz_pais, new_zealand.casos_novos AS nz_casos
                       FROM brasil INNER JOIN new_zealand ON brasil.data = new_zealand.data
                       WHERE brasil.data >= '2020-02-25' AND brasil.data <= '2021-02-27'
                       ORDER BY brasil.data ASC""",
@@ -28,7 +28,7 @@ query_dict = {
                        WHERE araraquara.data >= '2021-01-17' AND araraquara.data <= '2021-04-10'
                        ORDER BY araraquara.data ASC""",
 
-    'br_panorama': """SELECT data, obitos_novos AS br_obitos, obitos_acumulado AS br_obitos_acumulado, casos_novos AS br_casos, casos_acumulado AS br_casos_acumulado
+    'br_panorama': """SELECT data, brasil.regiao AS br_pais, obitos_novos AS br_obitos, obitos_acumulado AS br_obitos_acumulado, casos_novos AS br_casos, casos_acumulado AS br_casos_acumulado
                       FROM brasil
                       ORDER BY data ASC""",
     
