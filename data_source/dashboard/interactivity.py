@@ -2,8 +2,8 @@ import dash
 from dash.dependencies import Input, Output
 import plotly.graph_objects as go
 import plotly.express as px
-from dashboard.dashboard_layout import app
-from dashboard.data import df_brasil, df_states, brazil_states
+from data_source.dashboard.dashboard_layout import app
+from data_source.dashboard.data import df_brasil, df_states, brazil_states
 
 CENTER_LAT, CENTER_LON = -14.272572694355336, -51.25567404158474
 

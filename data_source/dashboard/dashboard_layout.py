@@ -1,8 +1,8 @@
 import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
-from dashboard.data import df_states, select_columns, fig, fig2
-from dashboard.data import df_correlacao_vacinas_mortes_copy
+from data_source.dashboard.data import df_states, select_columns, fig, fig2
+from data_source.dashboard.data import df_vacinacao_obito
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 
@@ -24,9 +24,9 @@ app.layout = dbc.Container(
                                 {'label': 'Brasil', 'value': 'Brasil'},
                                 {'label': 'Nova Zelândia', 'value': 'Nova Zelândia'},
                                 {'label': 'Araraquara', 'value': 'Araraquara'},
-                                {'label': 'Dracena', 'value': 'Dracena'}
+                                {'label': 'São Carlos', 'value': 'São Carlos'}
                             ],
-                            value=['Brasil', 'Nova Zelândia', 'Araraquara', 'Dracena'],
+                            value=['Brasil', 'Nova Zelândia', 'Araraquara', 'São Carlos'],
                             multi=True
 
                         ),
@@ -166,12 +166,12 @@ app.layout = dbc.Container(
 
 @app.callback(
     Output('graph_corr', 'figure'),
-    [Input('country-dropdown', 'value')]
+    [Input('brasil-dropdown', 'value')]
 )
 def vaccinarion_corr_death_graph(countries):
     print('Selected countries:', countries)
 
-    df_corr = df_correlacao_vacinas_mortes_copy[df_correlacao_vacinas_mortes_copy['country'].isin(countries)]
+    df_corr = df_vacinacao_obito[df_vacinacao_obito['country'].isin(countries)]
     print('Filtered DataFrame:')
     print(df_corr)
 
@@ -182,14 +182,14 @@ def vaccinarion_corr_death_graph(countries):
         traces.append(
             go.Scatter(
                 x=df_country['data'],
-                y=df_country['obitosNovos'],
+                y=df_country['br_obitos'],
                 name=f'Novos Óbitos - {country}'
             )
         )
         traces.append(
             go.Scatter(
                 x=df_country['data'],
-                y=df_country['totalVacinacoes'],
+                y=df_country['vacinas_acumulado'],
                 name=f'Vacinações Totais - {country}',
                 yaxis='y2'
             )
